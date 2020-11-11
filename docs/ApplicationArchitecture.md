@@ -87,7 +87,7 @@ The ViewModel layer is contained in the [CalcViewModel][CalcViewModel folder] pr
 data for the UI to bind against and act as the intermediary separating pure business logic from UI components that
 should not care about the model's implementation. Just as the View layer consists of a hierarchy of XAML files, the
 ViewModel consists of a hierarchy of ViewModel files. The relationship between XAML and ViewModel files is often 1:1.
-Here are the noteable ViewModel files to start exploring with:
+Here are the notable ViewModel files to start exploring with:
 
 * [ApplicationViewModel.h][ApplicationViewModel.h]: The ViewModel for [MainPage.xaml][MainPage.xaml]. This ViewModel
   is the root of the other mode-specific ViewModels. The application changes between modes by updating the `Mode` property
@@ -153,7 +153,9 @@ The CalcEngine contains the logic for interpreting and performing operations acc
 
 ### RatPack
 
-The RatPack (short for Rational Pack) is the core of the Calculator model and contains the logic for performing its mathematical operations. The interface to this layer is defined in [ratpak.h][ratpak.h].
+The RatPack (short for Rational Pack) is the core of the Calculator model and contains the logic for
+performing its mathematical operations (using [infinite precision][Infinite Precision] arithmetic
+instead of regular floating point arithmetic). The interface to this layer is defined in [ratpak.h][ratpak.h].
 
 [References]:####################################################################################################
 
@@ -199,4 +201,5 @@ The RatPack (short for Rational Pack) is the core of the Calculator model and co
 [CalcManager folder]:                 ../src/CalcManager
 [CalculatorManager.h]:                ../src/CalcManager/CalculatorManager.h
 [CalcEngine.h]:                       ../src/CalcManager/Header&#32;Files/CalcEngine.h
+[Infinite Precision]:                 https://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic
 [ratpak.h]:                           ../src/CalcManager/Ratpack/ratpak.h

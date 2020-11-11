@@ -1,4 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
 //
@@ -8,13 +8,12 @@
 
 #pragma once
 
-#include "Views\CalculatorStandardOperators.g.h"
-#include "Views\NumberPad.xaml.h"
+#include "Views/CalculatorStandardOperators.g.h"
+#include "Views/NumberPad.xaml.h"
 
 namespace CalculatorApp
 {
-    [Windows::Foundation::Metadata::WebHostHidden]
-    public ref class CalculatorStandardOperators sealed
+    [Windows::Foundation::Metadata::WebHostHidden] public ref class CalculatorStandardOperators sealed
     {
     public:
         CalculatorStandardOperators();
