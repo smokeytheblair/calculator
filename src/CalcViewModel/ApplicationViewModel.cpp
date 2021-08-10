@@ -12,8 +12,8 @@
 #include "DataLoaders/UnitConverterDataLoader.h"
 
 using namespace CalculatorApp;
-using namespace CalculatorApp::Common;
-using namespace CalculatorApp::DataLoaders;
+using namespace CalculatorApp::ViewModel::Common;
+using namespace CalculatorApp::ViewModel::DataLoaders;
 using namespace CalculatorApp::ViewModel;
 using namespace CalculationManager;
 using namespace Platform;
@@ -43,7 +43,7 @@ namespace
 ApplicationViewModel::ApplicationViewModel()
     : m_CalculatorViewModel(nullptr)
     , m_DateCalcViewModel(nullptr)
-	, m_GraphingCalcViewModel(nullptr)
+    , m_GraphingCalcViewModel(nullptr)
     , m_ConverterViewModel(nullptr)
     , m_PreviousMode(ViewMode::None)
     , m_mode(ViewMode::None)

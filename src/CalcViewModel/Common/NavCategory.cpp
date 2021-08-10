@@ -8,7 +8,8 @@
 #include <initializer_list>
 
 using namespace CalculatorApp;
-using namespace CalculatorApp::Common;
+using namespace CalculatorApp::ViewModel::Common;
+using namespace CalculatorApp::ViewModel;
 using namespace Concurrency;
 using namespace Platform;
 using namespace Platform::Collections;
@@ -295,7 +296,7 @@ void NavCategory::InitializeCategoryManifest(User ^ user)
             i++;
         }
     }
- }
+}
 
 // This function should only be used when storing the mode to app data.
 int NavCategory::Serialize(ViewMode mode)
@@ -347,8 +348,9 @@ bool NavCategory::IsValidViewMode(ViewMode mode)
 
 bool NavCategory::IsViewModeEnabled(ViewMode mode)
 {
-    auto iter =
-        find_if(begin(s_categoryManifest), end(s_categoryManifest), [mode](const NavCategoryInitializer& initializer) { return initializer.viewMode == mode && initializer.isEnabled; });
+    auto iter = find_if(begin(s_categoryManifest), end(s_categoryManifest), [mode](const NavCategoryInitializer& initializer) {
+        return initializer.viewMode == mode && initializer.isEnabled;
+    });
 
     return iter != s_categoryManifest.end();
 }
@@ -479,18 +481,19 @@ ViewMode NavCategory::GetViewModeForVirtualKey(MyVirtualKey virtualKey)
     return (iter != s_categoryManifest.end()) ? iter->viewMode : ViewMode::None;
 }
 
-vector<MyVirtualKey> NavCategory::GetCategoryAcceleratorKeys()
+void NavCategory::GetCategoryAcceleratorKeys(IVector<MyVirtualKey> ^ accelerators)
 {
-    vector<MyVirtualKey> accelerators{};
-    for (auto category : s_categoryManifest)
+    if (accelerators != nullptr)
     {
-        if (category.virtualKey != MyVirtualKey::None)
+        accelerators->Clear();
+        for (auto category : s_categoryManifest)
         {
-            accelerators.push_back(category.virtualKey);
+            if (category.virtualKey != MyVirtualKey::None)
+            {
+                accelerators->Append(category.virtualKey);
+            }
         }
     }
-
-    return accelerators;
 }
 
 NavCategoryGroup::NavCategoryGroup(const NavCategoryGroupInitializer& groupInitializer)
@@ -549,3 +552,4 @@ NavCategoryGroup ^ NavCategoryGroup::CreateConverterCategory()
     return ref new NavCategoryGroup(
         NavCategoryGroupInitializer{ CategoryGroupType::Converter, L"ConverterModeTextCaps", L"ConverterModeText", L"ConverterModePluralText" });
 }
+

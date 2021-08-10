@@ -6,6 +6,7 @@
 parameters:
   platform: ''
   condition: ''
+  isPublicRelease: false
 
 jobs:
 - job: Build${{ parameters.platform }}
@@ -27,7 +28,10 @@ jobs:
       downloadDirectory: $(Build.SourcesDirectory)
       vstsFeed: WindowsInboxApps
       vstsFeedPackage: calculator-internals
-      vstsPackageVersion: 0.0.54
+      ${{ if eq(parameters.isPublicRelease, true) }}:
+        vstsPackageVersion: 0.0.66
+      ${{ if eq(parameters.isPublicRelease, false) }}:
+        vstsPackageVersion: 0.0.65
 
   - template: ./build-single-architecture.yaml
     parameters:
@@ -42,11 +46,28 @@ jobs:
       treatNotIndexedAsWarning: true
       symbolsArtifactName: $(System.teamProject)/$(Build.BuildNumber)_$(BuildPlatform)$(BuildConfiguration)
 
+  - task: CopyFiles@2
+    displayName: Copy Files for BinSkim analysis
+    inputs:
+      SourceFolder: '$(Build.BinariesDirectory)\$(BuildConfiguration)\$(BuildPlatform)\Calculator\'
+      # Setting up a folder to store all the binary files that we need BinSkim to scan.
+      # If we put more things than we produce pdbs for and can index (such as nuget packages that ship without pdbs), binskim will fail.
+      # Below are ignored files
+      #   - clrcompression.dll
+      Contents: |
+        **\*
+        !**\clrcompression.dll
+      TargetFolder: '$(Agent.BuildDirectory)\binskim'
+      CleanTargetFolder: true
+      OverWrite: true
+      flattenFolders: false
+      analyzeTarget: '$(Agent.BuildDirectory)\binskim\*'
+
   - task: securedevelopmentteam.vss-secure-development-tools.build-task-binskim.BinSkim@3
     displayName: Run BinSkim
     inputs:
       inputType: Basic
-      analyzeTarget: $(Build.BinariesDirectory)\$(BuildConfiguration)\$(BuildPlatform)\Calculator\*
+      analyzeTarget: '$(Agent.BuildDirectory)\binskim\*'
       analyzeVerbose: true
       analyzeHashes: true
     continueOnError: true

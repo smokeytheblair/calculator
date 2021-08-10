@@ -81,7 +81,7 @@ jobs:
       downloadDirectory: $(Build.SourcesDirectory)
       vstsFeed: WindowsInboxApps
       vstsFeedPackage: calculator-internals
-      vstsPackageVersion: 0.0.54
+      vstsPackageVersion: 0.0.66
 
   - powershell: |
       # Just modify this line to indicate where your en-us PDP file is. Leave the other lines alone.
@@ -105,7 +105,7 @@ jobs:
   - task: MS-RDX-MRO.windows-store-publish-dev.package-task.store-package@2
     displayName: Create StoreBroker Payload
     inputs:
-      serviceEndpoint: Essential Experiences StoreBrokerProxy
+      serviceEndpoint: Calculator StoreBroker Connection
       sbConfigPath: Tools/Build/StoreBroker/SBCalculatorConfig.json
       sourceFolder: $(Build.ArtifactStagingDirectory)/appxBundleSigned
       contents: Microsoft.WindowsCalculator_8wekyb3d8bbwe.appxbundle
@@ -125,7 +125,7 @@ jobs:
     displayName: 'Flight StoreBroker Payload to team ring'
     name: StoreBrokerFlight
     inputs:
-      serviceEndpoint: Essential Experiences StoreBrokerProxy
+      serviceEndpoint: Calculator StoreBroker Connection
       appId: '$(AppId)'
       flightId: '$(FlightId)'
       inputMethod: JsonAndZip
@@ -149,8 +149,3 @@ jobs:
       SubmissionDataPath: '$(SBPackagePath)\SBCalculator.json'
       PackagePath: '$(SBPackagePath)\SBCalculator.zip'
       AeroEnvironment: Production
-
-  - task: PkgESLateTasks@10
-    displayName: Run PackageES LateTasks
-    env:
-      XES_DISABLEPROV: true

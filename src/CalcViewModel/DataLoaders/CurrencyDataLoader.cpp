@@ -11,11 +11,11 @@
 #include "UnitConverterDataConstants.h"
 
 using namespace CalculatorApp;
-using namespace CalculatorApp::Common;
-using namespace CalculatorApp::Common::LocalizationServiceProperties;
-using namespace CalculatorApp::DataLoaders;
+using namespace CalculatorApp::ViewModel::Common;
+using namespace CalculatorApp::ViewModel::Common::LocalizationServiceProperties;
+using namespace CalculatorApp::ViewModel::DataLoaders;
 using namespace CalculatorApp::ViewModel;
-using namespace CalculatorApp::ViewModel::CurrencyDataLoaderConstants;
+using namespace CalculatorApp::ViewModel::DataLoaders::CurrencyDataLoaderConstants;
 using namespace concurrency;
 using namespace Platform;
 using namespace std;
@@ -69,7 +69,7 @@ static constexpr auto DEFAULT_TO_CURRENCY = L"EUR";
 
 namespace CalculatorApp
 {
-    namespace ViewModel
+    namespace ViewModel::DataLoaders
     {
         namespace UnitConverterResourceKeys
         {
@@ -89,7 +89,7 @@ namespace CalculatorApp
     }
 }
 
-CurrencyDataLoader::CurrencyDataLoader(_In_ unique_ptr<ICurrencyHttpClient> client, const wchar_t * forcedResponseLanguage)
+CurrencyDataLoader::CurrencyDataLoader(_In_ unique_ptr<ICurrencyHttpClient> client, const wchar_t* forcedResponseLanguage)
     : m_client(move(client))
     , m_loadStatus(CurrencyLoadStatus::NotLoaded)
     , m_responseLanguage(L"en-US")
@@ -300,7 +300,7 @@ pair<wstring, wstring> CurrencyDataLoader::GetCurrencyRatioEquality(_In_ const U
                 double ratio = (iter2->second).ratio;
                 double rounded = RoundCurrencyRatio(ratio);
 
-                auto digit = LocalizationSettings::GetInstance().GetDigitSymbolFromEnUsDigit(L'1');
+                auto digit = LocalizationSettings::GetInstance()->GetDigitSymbolFromEnUsDigit(L'1');
                 auto digitSymbol = ref new String(&digit, 1);
                 auto roundedFormat = m_ratioFormatter->Format(rounded);
 
