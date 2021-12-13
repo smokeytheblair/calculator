@@ -13,27 +13,33 @@ pr: none
 name: 0.$(Date:yyMM).$(DayOfMonth)$(Rev:rr).0
 
 jobs:
-- template: ./templates/build-app-internal.yaml
+- template: ./templates/build-single-architecture.yaml
   parameters:
+    isReleaseBuild: true
+    useReleaseAppxManifest: false
     platform: x64
 
-- template: ./templates/build-app-internal.yaml
+- template: ./templates/build-single-architecture.yaml
   parameters:
+    isReleaseBuild: true
+    useReleaseAppxManifest: false
     platform: x86
 
-- template: ./templates/build-app-internal.yaml
+- template: ./templates/build-single-architecture.yaml
   parameters:
+    isReleaseBuild: true
+    useReleaseAppxManifest: false
     platform: ARM
 
 - template: ./templates/run-ui-tests.yaml
   parameters:
     platform: x64
-    runsettingsFileName: CalculatorUITests.release.runsettings
+    runsettingsFileName: CalculatorUITests.ci-internal.runsettings
 
 - template: ./templates/run-ui-tests.yaml
   parameters:
     platform: x86
-    runsettingsFileName: CalculatorUITests.release.runsettings
+    runsettingsFileName: CalculatorUITests.ci-internal.runsettings
 
 - template: ./templates/run-unit-tests.yaml
   parameters:

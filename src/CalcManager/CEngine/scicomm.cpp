@@ -519,6 +519,12 @@ void CCalcEngine::ProcessCommandWorker(OpCode wParam)
 
         if (wParam == IDC_OPENP)
         {
+            // if there's an omitted multiplication sign 
+            if (IsDigitOpCode(m_nLastCom) || IsUnaryOpCode(m_nLastCom) || m_nLastCom == IDC_PNT || m_nLastCom == IDC_CLOSEP)
+            {
+                ProcessCommand(IDC_MUL);
+            }
+
             CheckAndAddLastBinOpToHistory();
             m_HistoryCollector.AddOpenBraceToHistory();
 
@@ -594,7 +600,7 @@ void CCalcEngine::ProcessCommandWorker(OpCode wParam)
         // Set the "(=xx" indicator.
         if (nullptr != m_pCalcDisplay)
         {
-            m_pCalcDisplay->SetParenthesisNumber(m_openParenCount >= 0 ? static_cast<unsigned int>(m_openParenCount) : 0);
+            m_pCalcDisplay->SetParenthesisNumber(static_cast<unsigned int>(m_openParenCount));
         }
 
         if (!m_bError)
