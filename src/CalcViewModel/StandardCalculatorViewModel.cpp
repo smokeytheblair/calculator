@@ -137,6 +137,13 @@ StandardCalculatorViewModel::StandardCalculatorViewModel()
 String ^ StandardCalculatorViewModel::LocalizeDisplayValue(_In_ wstring const& displayValue)
 {
     wstring result(displayValue);
+
+    // Adds leading padding 0's to Programmer Mode's Binary Display
+    if (IsProgrammer && CurrentRadixType == NumberBase::BinBase)
+    {
+        result = AddPadding(result);
+    }
+
     LocalizationSettings::GetInstance()->LocalizeDisplayValue(&result);
     return ref new Platform::String(result.c_str());
 }
@@ -719,7 +726,7 @@ void StandardCalculatorViewModel::OnPasteCommand(Object ^ parameter)
     }
 
     // Ensure that the paste happens on the UI thread
-    create_task(CopyPasteManager::GetStringToPaste(mode, NavCategory::GetGroupType(mode), numberBase, bitLengthType))
+    create_task(CopyPasteManager::GetStringToPaste(mode, NavCategoryStates::GetGroupType(mode), numberBase, bitLengthType))
         .then([that, mode](String ^ pastedString) { that->OnPaste(pastedString); }, concurrency::task_continuation_context::use_current());
 }
 

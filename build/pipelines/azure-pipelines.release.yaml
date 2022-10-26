@@ -9,8 +9,8 @@ pr: none
 
 variables:
   versionMajor: 11
-  versionMinor: 2112
-  versionBuild: $[counter('11.2112.*', 0)]
+  versionMinor: 2210
+  versionBuild: $[counter(format('{0}.{1}.*', variables['versionMajor'], variables['versionMinor']), 0)]
   versionPatch: 0
 
 name: '$(versionMajor).$(versionMinor).$(versionBuild).$(versionPatch)'
@@ -36,6 +36,23 @@ jobs:
     useReleaseAppxmanifest: true
     condition: not(eq(variables['Build.Reason'], 'PullRequest'))
 
+- template: ./templates/build-single-architecture.yaml
+  parameters:
+    platform: ARM64
+    isReleaseBuild: true
+    useReleaseAppxmanifest: true
+    condition: not(eq(variables['Build.Reason'], 'PullRequest'))
+
+- template: ./templates/run-ui-tests.yaml
+  parameters:
+    platform: x64
+    runsettingsFileName: CalculatorUITests.release.runsettings
+
+- template: ./templates/run-ui-tests.yaml
+  parameters:
+    platform: x86
+    runsettingsFileName: CalculatorUITests.release.runsettings
+
 - template: ./templates/run-unit-tests.yaml
   parameters:
     platform: x64
@@ -44,7 +61,7 @@ jobs:
   parameters:
     platform: x86
 
-- template: ./templates/package-appxbundle.yaml
+- template: ./templates/package-msixbundle.yaml
   parameters:
     signBundle: true
     createStoreBrokerPackages: true

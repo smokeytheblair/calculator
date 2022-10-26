@@ -3,11 +3,6 @@
 
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Windows;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Runtime.InteropServices.ComTypes;
-using System;
-using System.Diagnostics;
 
 namespace CalculatorUITestFramework
 {
@@ -177,22 +172,22 @@ namespace CalculatorUITestFramework
             else if (source.Contains("dwordButton"))
             {
                 DWordButton.Click();
-                WordButton.Click();
-                ByteButton.Click();
+                ResetWordSize();
             }
             else if (source.Contains("wordButton"))
             {
                 WordButton.Click();
-                ByteButton.Click();
+                ResetWordSize();
             }
             else if (source.Contains("byteButton"))
             {
                 ByteButton.Click();
+                ResetWordSize();
             }
             else
             {
                 throw new NotFoundException("Could not find word size buttons in page source");
-            } 
+            }
         }
         public void ResetNumberSystem()
         {

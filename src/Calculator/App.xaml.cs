@@ -8,6 +8,7 @@
 
 using CalculatorApp.ViewModel.Common;
 using CalculatorApp.ViewModel.Common.Automation;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,7 +30,7 @@ namespace CalculatorApp
 {
     namespace ApplicationResourceKeys
     {
-        static public partial class Globals
+        public static class Globals
         {
             public static readonly string AppMinWindowHeight = "AppMinWindowHeight";
             public static readonly string AppMinWindowWidth = "AppMinWindowWidth";
@@ -39,7 +40,7 @@ namespace CalculatorApp
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App
+    public sealed partial class App
     {
         /// <summary>
         /// Initializes the singleton application object. This is the first line of authored code
@@ -85,7 +86,12 @@ namespace CalculatorApp
                 // If the app got pre-launch activated, then save that state in a flag
                 m_preLaunched = true;
             }
-            NavCategory.InitializeCategoryManifest(args.User);
+
+            NavCategoryStates.SetCurrentUser(args.User.NonRoamableId);
+
+            // It takes time to check GraphingMode at the 1st time. So, do it in a background thread
+            Task.Run(() => NavCategoryStates.IsViewModeEnabled(ViewMode.Graphing));
+
             OnAppLaunch(args, args.Arguments);
         }
 
@@ -119,8 +125,10 @@ namespace CalculatorApp
 
         private static Frame CreateFrame()
         {
-            var frame = new Frame();
-            frame.FlowDirection = LocalizationService.GetInstance().GetFlowDirection();
+            var frame = new Frame
+            {
+                FlowDirection = LocalizationService.GetInstance().GetFlowDirection()
+            };
             return frame;
         }
 
@@ -219,8 +227,7 @@ namespace CalculatorApp
                         _ = newCoreAppView.Dispatcher.RunAsync(
                             CoreDispatcherPriority.Normal, async () =>
                             {
-                                var that = weak.Target as App;
-                                if (that != null)
+                                if (weak.Target is App that)
                                 {
                                     var newRootFrame = App.CreateFrame();
 
@@ -394,16 +401,16 @@ namespace CalculatorApp
                 Dispose();
             }
 
-            private WindowFrameService m_frameService;
+            private readonly WindowFrameService m_frameService;
             private bool m_frameOpenedInWindow;
-            private App m_parent;
+            private readonly App m_parent;
         };
 
         private async Task SetupJumpList()
         {
             try
             {
-                var calculatorOptions = NavCategoryGroup.CreateCalculatorCategory();
+                var calculatorOptions = NavCategoryStates.CreateCalculatorCategoryGroup();
 
                 var jumpList = await JumpList.LoadCurrentAsync();
                 jumpList.SystemGroupKind = JumpListSystemGroupKind.None;
@@ -411,14 +418,14 @@ namespace CalculatorApp
 
                 foreach (NavCategory option in calculatorOptions.Categories)
                 {
-                    if (!option.IsEnabled)
+                    if (!NavCategoryStates.IsViewModeEnabled(option.ViewMode))
                     {
                         continue;
                     }
-                    ViewMode mode = option.Mode;
-                    var item = JumpListItem.CreateWithArguments(((int)mode).ToString(), "ms-resource:///Resources/" + NavCategory.GetNameResourceKey(mode));
-                    item.Description = "ms-resource:///Resources/" + NavCategory.GetNameResourceKey(mode);
-                    item.Logo = new Uri("ms-appx:///Assets/" + mode.ToString() + ".png");
+                    ViewMode mode = option.ViewMode;
+                    var item = JumpListItem.CreateWithArguments(((int)mode).ToString(), "ms-resource:///Resources/" + NavCategoryStates.GetNameResourceKey(mode));
+                    item.Description = "ms-resource:///Resources/" + NavCategoryStates.GetNameResourceKey(mode);
+                    item.Logo = new Uri("ms-appx:///Assets/" + mode + ".png");
 
                     jumpList.Items.Add(item);
                 }
@@ -497,7 +504,7 @@ namespace CalculatorApp
         }
 
         private readonly ReaderWriterLockSlim m_windowsMapLock = new ReaderWriterLockSlim();
-        private Dictionary<int, WindowFrameService> m_secondaryWindows = new Dictionary<int, WindowFrameService>();
+        private readonly Dictionary<int, WindowFrameService> m_secondaryWindows = new Dictionary<int, WindowFrameService>();
         private int m_mainViewId;
         private bool m_preLaunched;
     }

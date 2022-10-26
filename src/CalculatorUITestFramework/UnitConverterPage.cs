@@ -1,9 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 using OpenQA.Selenium.Appium.Windows;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CalculatorUITestFramework
 {
@@ -71,11 +68,9 @@ namespace CalculatorUITestFramework
         {
             CalculatorApp.ClickOnWindow();
             UnitConverterOperators.Units1.SendKeys(OpenQA.Selenium.Keys.Home);
-            UnitConverterOperators.Units1.SendKeys(OpenQA.Selenium.Keys.Enter);
 
             CalculatorApp.ClickOnWindow();
             UnitConverterOperators.Units2.SendKeys(OpenQA.Selenium.Keys.Home);
-            UnitConverterOperators.Units2.SendKeys(OpenQA.Selenium.Keys.Enter);
 
             CalculatorApp.ClickOnWindow();
         }

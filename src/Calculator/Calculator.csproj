@@ -13,8 +13,8 @@
     <AppContainerApplication>true</AppContainerApplication>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.22000.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <!-- We want to manually control the MinVersion/MaxVersionTested in the manifest so turn of the replacement. -->
     <AppxOSMinVersionReplaceManifestVersion>false</AppxOSMinVersionReplaceManifestVersion>
     <AppxOSMaxVersionTestedReplaceManifestVersion>false</AppxOSMaxVersionTestedReplaceManifestVersion>
@@ -143,9 +143,8 @@
     </Compile>
     <Compile Include="Common\AlwaysSelectedCollectionView.cs" />
     <Compile Include="Common\AppLifecycleLogger.cs" />
-    <Compile Include="Common\KeyboardShortcuManager.cs" />
+    <Compile Include="Common\KeyboardShortcutManager.cs" />
     <Compile Include="Common\ValidatingConverters.cs" />
-    <Compile Include="Common\ViewState.cs" />
     <Compile Include="Controls\CalculationResult.cs" />
     <Compile Include="Controls\CalculationResultAutomationPeer.cs" />
     <Compile Include="Controls\CalculatorButton.cs" />
@@ -165,11 +164,12 @@
     <Compile Include="Converters\ItemSizeToVisibilityConverter.cs" />
     <Compile Include="Converters\RadixToStringConverter.cs" />
     <Compile Include="Converters\VisibilityNegationConverter.cs" />
+    <Compile Include="Selectors\NavViewMenuItemTemplateSelector.cs" />
     <Compile Include="Utils\ThemeHelper.cs" />
     <Compile Include="Views\GraphingCalculator\EquationStylePanelControl.xaml.cs">
       <DependentUpon>EquationStylePanelControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GraphingCalculator\KeyGraphFeaturesTemplateSelector.cs" />
+    <Compile Include="Selectors\KeyGraphFeaturesTemplateSelector.cs" />
     <Compile Include="Utils\DelegateCommandUtils.cs" />
     <Compile Include="Views\Calculator.xaml.cs">
       <DependentUpon>Calculator.xaml</DependentUpon>
@@ -235,7 +235,7 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StateTriggers\AspectRatioTrigger.cs" />
-    <Compile Include="Views\StateTriggers\CalculatorProgrammerDisplayPanel.xaml.cs">
+    <Compile Include="Views\CalculatorProgrammerDisplayPanel.xaml.cs">
       <DependentUpon>CalculatorProgrammerDisplayPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StateTriggers\ControlSizeTrigger.cs" />
@@ -773,7 +773,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\StateTriggers\CalculatorProgrammerDisplayPanel.xaml">
+    <Page Include="Views\CalculatorProgrammerDisplayPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -792,9 +792,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.10</Version>
+      <Version>6.2.14</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.UI.Xaml" Version="2.6.2" />
+    <PackageReference Include="Microsoft.UI.Xaml" Version="2.8.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CalcViewModel\CalcViewModel.vcxproj">

@@ -5,7 +5,7 @@
 #
 
 trigger:
-- master
+- main
 - release/*
 - feature/*
 pr: none
@@ -31,6 +31,12 @@ jobs:
     useReleaseAppxManifest: false
     platform: ARM
 
+- template: ./templates/build-single-architecture.yaml
+  parameters:
+    isReleaseBuild: true
+    useReleaseAppxManifest: false
+    platform: ARM64
+
 - template: ./templates/run-ui-tests.yaml
   parameters:
     platform: x64
@@ -49,4 +55,4 @@ jobs:
   parameters:
     platform: x86
 
-- template: ./templates/package-appxbundle.yaml
+- template: ./templates/package-msixbundle.yaml

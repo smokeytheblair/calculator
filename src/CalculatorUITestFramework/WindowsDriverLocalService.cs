@@ -18,16 +18,18 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace CalculatorUITestFramework
 {
     public class WindowsDriverLocalService : IDisposable
     {
-        private FileInfo FileName;
-        private string Arguments;
-        private IPAddress IP;
-        private int Port;
+        private readonly FileInfo FileName;
+        private readonly string Arguments;
+        private readonly IPAddress IP;
+        private readonly int Port;
         private TimeSpan InitializationTimeout;
         private Process Service;
 
@@ -119,11 +121,7 @@ namespace CalculatorUITestFramework
             GC.SuppressFinalize(this);
         }
 
-        public Uri ServiceUrl
-        {
-            // Note: append /wd/hub to the URL if you're directing the test at Appium
-            get { return new Uri($"http://{this.IP}:{Convert.ToString(this.Port)}"); }
-        }
+        public Uri ServiceUrl => new Uri($"http://{this.IP}:{Convert.ToString(this.Port)}");
 
         private void DestroyProcess()
         {
@@ -147,45 +145,25 @@ namespace CalculatorUITestFramework
 
         private bool Ping()
         {
-            bool pinged = false;
-
             Uri status;
-
             Uri service = this.ServiceUrl;
-            if (service.IsLoopback)
+            using (HttpClient httpClient = new HttpClient())
             {
-                status = new Uri("http://localhost:" + Convert.ToString(this.Port) + "/status");
-            }
-            else
-            {
-                status = new Uri(service + "/status");
-            }
+                httpClient.Timeout = this.InitializationTimeout;
 
-            DateTime endTime = DateTime.Now.Add(this.InitializationTimeout);
-            while (!pinged & DateTime.Now < endTime)
-            {
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(status);
-                HttpWebResponse response = null;
-                try
+                if (service.IsLoopback)
                 {
-                    using (response = (HttpWebResponse)request.GetResponse())
-                    {
-                        pinged = true;
-                    }
+                    status = new Uri("http://localhost:" + Convert.ToString(this.Port) + "/status");
                 }
-                catch (Exception)
+                else
                 {
-                    pinged = false;
+                    status = new Uri(service + "/status");
                 }
-                finally
-                {
-                    if (response != null)
-                    {
-                        response.Close();
-                    }
-                }
+
+                var httpResponse = Task.Run(() => httpClient.GetAsync(status)).ConfigureAwait(false).GetAwaiter().GetResult();
+
+                return httpResponse.IsSuccessStatusCode;
             }
-            return pinged;
         }
     }
 }
