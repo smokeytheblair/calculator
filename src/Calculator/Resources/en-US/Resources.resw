@@ -1773,6 +1773,10 @@
     <value>J</value>
     <comment>An abbreviation for a measurement unit of energy</comment>
   </data>
+    <data name="UnitAbbreviation_Kilowatthour" xml:space="preserve">
+    <value>kWh</value>
+    <comment>An abbreviation for a measurement unit of electricity consumption</comment>
+  </data>
   <data name="UnitAbbreviation_Kelvin" xml:space="preserve">
     <value>K</value>
     <comment>An abbreviation for the temperature system "Kelvin" (eg. 0 degrees Celsius = 273 Kelvin)</comment>
@@ -2136,6 +2140,10 @@
   <data name="UnitName_Joule" xml:space="preserve">
     <value>Joules</value>
     <comment>A measurement unit for energy. (Please choose the most appropriate plural form to fit any number between 0 and 999,999,999,999,999)</comment>
+  </data>
+    <data name="UnitName_Kilowatthour" xml:space="preserve">
+    <value>Kilowatt-hours</value>
+    <comment>A measurement unit for electricity consumption. (Please choose the most appropriate plural form to fit any number between 0 and 999,999,999,999,999)</comment>
   </data>
   <data name="UnitName_Kelvin" xml:space="preserve">
     <value>Kelvin</value>
@@ -4706,11 +4714,11 @@
     <value>Appearance</value>
     <comment>Subtitle of appearance setting on Settings page</comment>
   </data>
-  <data name="SettingsAppThemeTitle.Text" xml:space="preserve">
+  <data name="AppThemeExpander.Header" xml:space="preserve">
     <value>App theme</value>
     <comment>Title of App theme expander</comment>
   </data>
-  <data name="SettingsAppThemeDescription.Text" xml:space="preserve">
+  <data name="AppThemeExpander.Description" xml:space="preserve">
     <value>Select which app theme to display</value>
     <comment>Description of App theme expander</comment>
   </data>
