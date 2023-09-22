@@ -37,6 +37,10 @@ jobs:
   - checkout: self
     fetchDepth: 1
 
+  - ${{ if eq(parameters.isOSSBuild, true) }}:
+    - task: nuget-security-analysis@0
+      displayName: Secure Supply Chain Analysis
+
   - ${{ if eq(parameters.isReleaseBuild, true) }}:
     - task: UniversalPackages@0
       displayName: Download internals package
@@ -97,7 +101,6 @@ jobs:
         searchPattern: '**/*.pdb'
         symbolServerType: teamServices
         treatNotIndexedAsWarning: true
-        symbolsArtifactName: $(System.teamProject)/$(Build.BuildNumber)_$(BuildPlatform)$(BuildConfiguration)
 
     - task: CopyFiles@2
       displayName: Copy Files for BinSkim analysis
