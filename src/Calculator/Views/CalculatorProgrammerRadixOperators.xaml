@@ -21,7 +21,7 @@
         <converters:BooleanToVisibilityNegationConverter x:Key="BooleanToVisibilityNegationConverter"/>
     </UserControl.Resources>
 
-    <Grid x:Name="ProgRadixOps">
+    <Grid x:Name="ProgRadixOps" FlowDirection="LeftToRight">
         <Grid.RowDefinitions>
             <RowDefinition x:Name="OperatorPanelRow" Height="Auto"/>
             <RowDefinition Height="1*"/>
@@ -230,6 +230,7 @@
 
         <controls:OperatorPanelListView Grid.ColumnSpan="6"
                                         Background="{ThemeResource AppOperatorPanelBackground}"
+                                        FlowDirection="{x:Bind FlowDirection}"
                                         AutomationProperties.HeadingLevel="Level1"
                                         AutomationProperties.Name="{utils:ResourceString Name=ProgrammerOperatorPanel/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}">
 
@@ -248,6 +249,7 @@
                         <Grid x:Name="BitwiseGrid"
                               MinWidth="258"
                               MinHeight="96"
+                              FlowDirection="LeftToRight"
                               XYFocusKeyboardNavigation="Enabled">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="1*"/>
@@ -272,7 +274,7 @@
                                                        AutomationProperties.Name="{utils:ResourceString Name=andButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                                        ButtonId="And"
                                                        Click="FlyoutButton_Clicked"
-                                                       Command="{x:Bind Model.ButtonPressed}"
+                                                       Command="{x:Bind ViewModel.ButtonPressed}"
                                                        Content="AND"
                                                        IsEnabled="{x:Bind BitwiseButton.IsEnabled, Mode=OneWay}"/>
 
@@ -286,7 +288,7 @@
                                                        AutomationProperties.Name="{utils:ResourceString Name=orButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                                        ButtonId="Or"
                                                        Click="FlyoutButton_Clicked"
-                                                       Command="{x:Bind Model.ButtonPressed}"
+                                                       Command="{x:Bind ViewModel.ButtonPressed}"
                                                        Content="OR"
                                                        IsEnabled="{x:Bind BitwiseButton.IsEnabled, Mode=OneWay}"/>
 
@@ -299,7 +301,7 @@
                                                        AutomationProperties.Name="{utils:ResourceString Name=notButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                                        ButtonId="Not"
                                                        Click="FlyoutButton_Clicked"
-                                                       Command="{x:Bind Model.ButtonPressed}"
+                                                       Command="{x:Bind ViewModel.ButtonPressed}"
                                                        Content="NOT"
                                                        IsEnabled="{x:Bind BitwiseButton.IsEnabled, Mode=OneWay}"/>
 
@@ -313,7 +315,7 @@
                                                        AutomationProperties.Name="{utils:ResourceString Name=nandButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                                        ButtonId="Nand"
                                                        Click="FlyoutButton_Clicked"
-                                                       Command="{x:Bind Model.ButtonPressed}"
+                                                       Command="{x:Bind ViewModel.ButtonPressed}"
                                                        Content="NAND"
                                                        IsEnabled="{x:Bind BitwiseButton.IsEnabled, Mode=OneWay}"/>
 
@@ -328,7 +330,7 @@
                                                        AutomationProperties.Name="{utils:ResourceString Name=norButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                                        ButtonId="Nor"
                                                        Click="FlyoutButton_Clicked"
-                                                       Command="{x:Bind Model.ButtonPressed}"
+                                                       Command="{x:Bind ViewModel.ButtonPressed}"
                                                        Content="NOR"
                                                        IsEnabled="{x:Bind BitwiseButton.IsEnabled, Mode=OneWay}"/>
 
@@ -343,7 +345,7 @@
                                                        AutomationProperties.Name="{utils:ResourceString Name=xorButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                                        ButtonId="Xor"
                                                        Click="FlyoutButton_Clicked"
-                                                       Command="{x:Bind Model.ButtonPressed}"
+                                                       Command="{x:Bind ViewModel.ButtonPressed}"
                                                        Content="XOR"
                                                        IsEnabled="{x:Bind BitwiseButton.IsEnabled, Mode=OneWay}"/>
                         </Grid>
@@ -501,7 +503,7 @@
                                        ButtonId="Clear"
                                        Content="C"
                                        LostFocus="ClearButton_LostFocus"
-                                       Visibility="{x:Bind Model.IsInputEmpty, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                       Visibility="{x:Bind ViewModel.IsInputEmpty, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
             <controls:CalculatorButton x:Name="ClearEntryButton"
                                        Style="{StaticResource OperatorButtonStyle}"
@@ -512,7 +514,7 @@
                                        ButtonId="ClearEntry"
                                        Content="CE"
                                        LostFocus="ClearEntryButton_LostFocus"
-                                       Visibility="{x:Bind Model.IsInputEmpty, Mode=OneWay, Converter={StaticResource BooleanToVisibilityNegationConverter}}"/>
+                                       Visibility="{x:Bind ViewModel.IsInputEmpty, Mode=OneWay, Converter={StaticResource BooleanToVisibilityNegationConverter}}"/>
 
             <controls:CalculatorButton x:Name="BackSpaceButton"
                                        Grid.Column="1"
@@ -536,7 +538,7 @@
                                    ButtonId="OpenParenthesis"
                                    Content="("
                                    GotFocus="OpenParenthesisButton_GotFocus"
-                                   Tag="{x:Bind ParenthesisCountToString(Model.OpenParenthesisCount), Mode=OneWay}"/>
+                                   Tag="{x:Bind ParenthesisCountToString(ViewModel.OpenParenthesisCount), Mode=OneWay}"/>
 
         <controls:CalculatorButton x:Name="CloseParenthesisButton"
                                    Grid.Row="2"
@@ -661,7 +663,7 @@
                                        AutomationProperties.Name="{utils:ResourceString Name=aButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                        ButtonId="A"
                                        Content="A"
-                                       IsEnabled="{x:Bind Model.AreHEXButtonsEnabled, Mode=OneWay}"/>
+                                       IsEnabled="{x:Bind ViewModel.AreHEXButtonsEnabled, Mode=OneWay}"/>
 
             <controls:CalculatorButton x:Name="BButton"
                                        Grid.Row="1"
@@ -673,7 +675,7 @@
                                        AutomationProperties.Name="{utils:ResourceString Name=bButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                        ButtonId="B"
                                        Content="B"
-                                       IsEnabled="{x:Bind Model.AreHEXButtonsEnabled, Mode=OneWay}"/>
+                                       IsEnabled="{x:Bind ViewModel.AreHEXButtonsEnabled, Mode=OneWay}"/>
 
             <controls:CalculatorButton x:Name="CButton"
                                        Grid.Row="2"
@@ -685,7 +687,7 @@
                                        AutomationProperties.Name="{utils:ResourceString Name=cButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                        ButtonId="C"
                                        Content="C"
-                                       IsEnabled="{x:Bind Model.AreHEXButtonsEnabled, Mode=OneWay}"/>
+                                       IsEnabled="{x:Bind ViewModel.AreHEXButtonsEnabled, Mode=OneWay}"/>
 
             <controls:CalculatorButton x:Name="DButton"
                                        Grid.Row="3"
@@ -697,7 +699,7 @@
                                        AutomationProperties.Name="{utils:ResourceString Name=dButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                        ButtonId="D"
                                        Content="D"
-                                       IsEnabled="{x:Bind Model.AreHEXButtonsEnabled, Mode=OneWay}"/>
+                                       IsEnabled="{x:Bind ViewModel.AreHEXButtonsEnabled, Mode=OneWay}"/>
 
             <controls:CalculatorButton x:Name="EButton"
                                        Grid.Row="4"
@@ -709,7 +711,7 @@
                                        AutomationProperties.Name="{utils:ResourceString Name=eButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                        ButtonId="E"
                                        Content="E"
-                                       IsEnabled="{x:Bind Model.AreHEXButtonsEnabled, Mode=OneWay}"/>
+                                       IsEnabled="{x:Bind ViewModel.AreHEXButtonsEnabled, Mode=OneWay}"/>
 
             <controls:CalculatorButton x:Name="FButton"
                                        Grid.Row="5"
@@ -721,7 +723,7 @@
                                        AutomationProperties.Name="{utils:ResourceString Name=fButton/[using:Windows.UI.Xaml.Automation]AutomationProperties/Name}"
                                        ButtonId="F"
                                        Content="F"
-                                       IsEnabled="{x:Bind Model.AreHEXButtonsEnabled, Mode=OneWay}"/>
+                                       IsEnabled="{x:Bind ViewModel.AreHEXButtonsEnabled, Mode=OneWay}"/>
 
             <local:NumberPad x:Name="NumberPad"
                              Grid.Row="2"
@@ -729,7 +731,7 @@
                              Grid.Column="1"
                              Grid.ColumnSpan="3"
                              ButtonStyle="{StaticResource NumericButtonStyle18}"
-                             CurrentRadixType="{x:Bind Model.CurrentRadixType, Mode=OneWay}"/>
+                             CurrentRadixType="{x:Bind ViewModel.CurrentRadixType, Mode=OneWay}"/>
         </Grid>
 
         <controls:CalculatorButton x:Name="NegateButton"
